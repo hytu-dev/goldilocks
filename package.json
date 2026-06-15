@@ -1,0 +1,43 @@
+{
+  "name": "@hytu/goldilocks",
+  "version": "0.1.0",
+  "description": "Knuth-Plass line breaking and hyphenation as a web component",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite demo",
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hytu-dev/goldilocks.git"
+  },
+  "keywords": [
+    "typography",
+    "line-breaking",
+    "knuth-plass",
+    "hyphenation",
+    "web-component"
+  ],
+  "author": "hytu",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
+  }
+}
