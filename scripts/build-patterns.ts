@@ -11,18 +11,20 @@ const trie = buildTrie(rawPatterns);
 const exceptions = buildExceptions(rawExceptions);
 
 const trieJSON = JSON.stringify(trie);
-const exceptionJSON = JSON.stringify(exceptions);
+const exceptionsJSON = JSON.stringify(exceptions);
 
 const output = `// Auto-generated from hyph-en-us patterns — do not edit
-export const trie = ${trieJSON} as const;
-export const exceptions: Record<string, number[]> = ${exceptionJSON};`;
+import type { TrieNode } from "./types";
+
+export const trie: TrieNode = ${trieJSON};
+export const exceptions: Record<string, number[]> = ${exceptionsJSON};\n`;
 
 writeFileSync(resolve(SRC, "trie-en-us.ts"), output);
 console.log(`Done → src/hyphenation/trie-en-us.ts`);
 console.log(`Patterns: ${rawPatterns.length}`);
 console.log(`Exceptions: ${Object.keys(exceptions).length}`);
 
-// helpers---------------------------------------------------------------------
+// helpers --------------------------------------------------------------------
 
 interface TrieNode {
   [key: string]: TrieNode | number[] | undefined;
