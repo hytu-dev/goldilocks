@@ -13,7 +13,7 @@ function visualize(word: string, points: number[]): string {
   return result + word.slice(prev);
 }
 
-// Exception words ------------------------------------------------------------
+// Exception words --------------------------------------------------------------------------------
 // Breakpoints from the TeX hyph-en-us exception list.
 describe("exception words", () => {
   const cases: [string, number[]][] = [
@@ -40,7 +40,7 @@ describe("exception words", () => {
   }
 });
 
-// Common words ---------------------------------------------------------------
+// Common words -----------------------------------------------------------------------------------
 // Pattern matching verified against common English words.
 describe("common words", () => {
   const cases: [string, number[]][] = [
@@ -67,24 +67,10 @@ describe("common words", () => {
   }
 });
 
-// Short / trivial words ------------------------------------------------------
+// Short / trivial words --------------------------------------------------------------------------
 // Too short to break; LEFT_MIN=2 + RIGHT_MIN=3 needs ≥5 chars.
 describe("short words return no breakpoints", () => {
-  const words = [
-    "",
-    "a",
-    "I",
-    "ab",
-    "be",
-    "do",
-    "go",
-    "the",
-    "cat",
-    "dog",
-    "run",
-    "ox",
-    "x",
-  ];
+  const words = ["", "a", "I", "ab", "be", "do", "go", "the", "cat", "dog", "run", "ox", "x"];
 
   for (const word of words) {
     it(`"${word}" → []`, () => {
@@ -93,7 +79,7 @@ describe("short words return no breakpoints", () => {
   }
 });
 
-// Case insensitivity ---------------------------------------------------------
+// Case insensitivity -----------------------------------------------------------------------------
 // Casing is ignored; hyphenate() lowercases internally.
 describe("case insensitivity", () => {
   it("uppercase input produces same breakpoints as lowercase", () => {
@@ -109,7 +95,7 @@ describe("case insensitivity", () => {
   });
 });
 
-// Structural invariants ------------------------------------------------------
+// Structural invariants --------------------------------------------------------------------------
 // Output must satisfy these properties for any input.
 describe("structural invariants", () => {
   const testWords = [

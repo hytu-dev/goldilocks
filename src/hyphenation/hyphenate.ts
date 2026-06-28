@@ -1,5 +1,5 @@
-// Liang-Knuth hyphenation: patterns encode multi-level priorities where
-// odd = break, even = inhibit, and higher levels override lower ones.
+// Liang-Knuth hyphenation: patterns encode multi-level priorities where odd = break,
+// even = inhibit, and higher levels override lower ones.
 
 import { trie, exceptions } from "./trie-en-us";
 import type { TrieNode } from "./types";
@@ -17,7 +17,7 @@ export function hyphenate(word: string): number[] {
   return collectBreakPoints(levels, lower.length);
 }
 
-// helpers --------------------------------------------------------------------
+// helpers ----------------------------------------------------------------------------------------
 
 function computeLevels(padded: string): number[] {
   const paddedLen = padded.length;
