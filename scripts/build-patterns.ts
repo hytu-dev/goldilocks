@@ -24,7 +24,7 @@ console.log(`Done → src/hyphenation/trie-en-us.ts`);
 console.log(`Patterns: ${rawPatterns.length}`);
 console.log(`Exceptions: ${Object.keys(exceptions).length}`);
 
-// helpers --------------------------------------------------------------------
+// helpers ----------------------------------------------------------------------------------------
 
 interface TrieNode {
   [key: string]: TrieNode | number[] | undefined;
