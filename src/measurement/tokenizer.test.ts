@@ -33,8 +33,8 @@ describe("basic splitting", () => {
     expect(texts("a\tb\nc")).toEqual(["a", "\t", "b", "\n", "c"]);
   });
 
-  it("mixed whitespace collapses into one token", () => {
-    expect(texts("a \t\n b")).toEqual(["a", " \t\n ", "b"]);
+  it("mixed whitespace splits per character", () => {
+    expect(texts("a \t\n b")).toEqual(["a", " ", "\t", "\n", " ", "b"]);
   });
 });
 
@@ -89,8 +89,8 @@ describe("apostrophes", () => {
     expect(texts("cat's")).toEqual(["cat's"]);
   });
 
-  it("leading apostrophe binds to word", () => {
-    expect(texts("'twas")).toEqual(["'twas"]);
+  it("leading apostrophe is separate punctuation", () => {
+    expect(texts("'twas")).toEqual(["'", "twas"]);
   });
 });
 
