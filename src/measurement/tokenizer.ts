@@ -4,11 +4,6 @@ const WORD_RE = /[\p{L}\p{N}']/u;
 const WHITESPACE_RE = /^\s+$/;
 const TOKEN_RE = /[\p{L}\p{N}']+|\s+|[^\p{L}\p{N}'\s]/gu;
 
-/**
- * Split text into word, whitespace, and punctuation tokens with source offsets.
- * @param text The raw text content of a Text node.
- * @returns Tokens preserving original offsets for Range-based measurement.
- */
 export function tokenize(text: string): Token[] {
   return [...text.matchAll(TOKEN_RE)].map((match) => ({
     kind: classifyToken(match[0]),
