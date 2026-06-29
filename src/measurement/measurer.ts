@@ -94,7 +94,7 @@ function batchMeasureBreakOptions(words: Map<string, WordEntry>, container: HTML
   const jobs = buildSpanJobs(words);
   const spans: HTMLSpanElement[] = new Array(jobs.length);
   for (let j = 0; j < jobs.length; ++j) {
-    const span = document.createElement("span");
+    const span = container.ownerDocument.createElement("span");
     span.textContent = jobs[j].text;
     spans[j] = span;
     container.appendChild(span);
