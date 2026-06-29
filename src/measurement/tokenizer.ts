@@ -1,22 +1,23 @@
 import { TokenKind, type Token } from "./types";
 
-const WORD_RE = /[\p{L}\p{N}']/u;
+const segmenter = new Intl.Segmenter("en", { granularity: "word" });
 const WHITESPACE_RE = /^\s+$/;
-const TOKEN_RE = /[\p{L}\p{N}']+|\s+|[^\p{L}\p{N}'\s]/gu;
 
 export function tokenize(text: string): Token[] {
-  return [...text.matchAll(TOKEN_RE)].map((match) => ({
-    kind: classifyToken(match[0]),
-    text: match[0],
-    start: match.index!,
-    end: match.index! + match[0].length,
-  }));
+  const tokens: Token[] = [];
+  for (const { segment, index, isWordLike } of segmenter.segment(text)) {
+    tokens.push({
+      kind: classifySegment(segment, isWordLike ?? false),
+      text: segment,
+      start: index,
+      end: index + segment.length,
+    });
+  }
+  return tokens;
 }
 
-// helper -----------------------------------------------------------------------------------------
-
-function classifyToken(raw: string): TokenKind {
-  if (WHITESPACE_RE.test(raw)) return TokenKind.Whitespace;
-  if (raw.length === 1 && !WORD_RE.test(raw)) return TokenKind.Punctuation;
-  return TokenKind.Word;
+function classifySegment(segment: string, isWordLike: boolean): TokenKind {
+  if (isWordLike) return TokenKind.Word;
+  if (WHITESPACE_RE.test(segment)) return TokenKind.Whitespace;
+  return TokenKind.Punctuation;
 }
