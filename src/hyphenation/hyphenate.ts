@@ -9,7 +9,7 @@ const RIGHT_MIN = 3;
 
 export function hyphenate(word: string): number[] {
   const lower = word.toLowerCase();
-  if (lower in exceptions) return exceptions[lower];
+  if (Object.hasOwn(exceptions, lower)) return exceptions[lower];
 
   const padded = `.${lower}.`;
   const levels = computeLevels(padded);
@@ -17,7 +17,7 @@ export function hyphenate(word: string): number[] {
   return collectBreakPoints(levels, lower.length);
 }
 
-// helpers ----------------------------------------------------------------------------------------
+// helpers -----------------------------------------------------------------------------------------
 
 function computeLevels(padded: string): number[] {
   const paddedLen = padded.length;
