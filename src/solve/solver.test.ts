@@ -1,14 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { solve } from "./solver";
-import { TokenKind, type MeasuredToken } from "../measurement";
+import { solve } from "./solve";
+import { TokenKind, type MeasuredToken } from "../measure";
 
-const w = (
-  width: number,
-  breakOptions?: { preBreakWidth: number; postBreakWidth: number }[],
-) => ({ kind: TokenKind.Word, width, breakOptions }) as MeasuredToken;
+const w = (width: number, breakOptions?: { preBreakWidth: number; postBreakWidth: number }[]) =>
+  ({ kind: TokenKind.Word, width, breakOptions }) as MeasuredToken;
 
-const s = (width: number) =>
-  ({ kind: TokenKind.Whitespace, width }) as MeasuredToken;
+const s = (width: number) => ({ kind: TokenKind.Whitespace, width }) as MeasuredToken;
 
 describe("solver sanity", () => {
   it("returns zero lines for empty input", () => {
@@ -52,11 +49,7 @@ describe("solver sanity", () => {
   });
 
   describe("hyphenation break with fragments", () => {
-    const tokens = [
-      w(40),
-      s(10),
-      w(100, [{ preBreakWidth: 55, postBreakWidth: 50 }]),
-    ];
+    const tokens = [w(40), s(10), w(100, [{ preBreakWidth: 55, postBreakWidth: 50 }])];
     const r = solve(tokens, 105)!;
 
     it("produces two lines", () => {

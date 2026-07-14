@@ -14,9 +14,9 @@ import type { TrieNode } from "./types";
 export const trie: TrieNode = ${trieJSON};
 export const exceptions: Record<string, number[]> = ${hypsJSON};\n`;
 
-writeFileSync(resolve(resolve(ROOT, "src/hyphenation"), "trie-en-us.ts"), output);
+writeFileSync(resolve(resolve(ROOT, "src/hyphenate"), "trie-en-us.ts"), output);
 
-// helpers ----------------------------------------------------------------------------------------
+// helpers -----------------------------------------------------------------------------------------
 
 interface TrieNode {
   [key: string]: TrieNode | number[] | undefined;
