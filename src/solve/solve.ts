@@ -1,5 +1,5 @@
-import type { MeasuredToken, BreakOption } from "../measurement";
-import { TokenKind } from "../measurement";
+import type { MeasuredToken, BreakOption } from "../measure";
+import { TokenKind } from "../measure";
 
 // output types ------------------------------------------------------------------------------------
 

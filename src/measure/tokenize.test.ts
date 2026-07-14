@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { tokenize } from "./tokenizer";
+import { tokenize } from "./tokenize";
 import { TokenKind } from "./types";
 
 function kinds(text: string): TokenKind[] {
