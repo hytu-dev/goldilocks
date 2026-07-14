@@ -23,7 +23,7 @@ if (index !== words.length) {
 }
 
 const output = results.map((r) => `${r.word}\t${r.positions.join(",")}`).join("\n");
-writeFileSync(resolve(ROOT, "fixtures/golden"), output + "\n");
+writeFileSync(resolve(ROOT, "fixtures/golden.hyp"), output + "\n");
 await rm(resolve(__dirname, "./golden.log"));
 
 // helpers -----------------------------------------------------------------------------------------

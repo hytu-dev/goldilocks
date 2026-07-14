@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { measure } from "./measurer";
+import { measure } from "./measure";
 import { TokenKind } from "./types";
 
 // Test fixtures ----------------------------------------------------------------------------------
