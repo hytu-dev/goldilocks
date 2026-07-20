@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +23,7 @@ jobs:
       - run: npm run build
 
   test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,3 +34,39 @@ jobs:
       - run: npm ci
       - run: npx tsx scripts/test/golden.hyp.ts
       - run: npx tsx scripts/test/golden.nod.ts
+
+  update-badges:
+    name: Update Badges
+    needs: [test]
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: badges
+
+      - name: Generate badge JSON
+        run: |
+          if [ "${{ needs.test.result }}" = "success" ]; then
+            COLOR="brightgreen"
+            MSG="430K words · 25K paras"
+          else
+            COLOR="red"
+            MSG="FAILING"
+          fi
+          jq -n \
+            --arg msg "$MSG" \
+            --arg color "$COLOR" \
+            '{schemaVersion: 1, label: "golden test", message: $msg, color: $color}' \
+            > golden.json
+
+      - name: Push to badges branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add golden.json
+          git diff --cached --quiet && exit 0
+          git commit -m "update badges"
+          git push
