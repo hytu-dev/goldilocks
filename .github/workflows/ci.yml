@@ -10,8 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,12 +19,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx playwright install chromium --with-deps
       - run: npm run build
-      - run: npm test
 
-  test-hyphenation:
-    name: Hyphenation Golden Test
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,4 +30,5 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx tsx scripts/test/hyphenation.ts
+      - run: npx tsx scripts/test/golden.hyp.ts
+      - run: npx tsx scripts/test/golden.nod.ts
