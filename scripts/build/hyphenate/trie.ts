@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-const ROOT = resolve(import.meta.dirname, "../..");
+const ROOT = resolve(import.meta.dirname, "../../..");
 const rawPats = readFileSync(resolve(ROOT, "data/en-us.pat"), "utf-8").trimEnd().split("\n");
 const rawHyps = readFileSync(resolve(ROOT, "data/en-us.hyp"), "utf-8").trimEnd().split("\n");
 
