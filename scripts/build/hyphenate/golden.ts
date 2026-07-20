@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { rm } from "node:fs/promises";
 
 const __dirname = import.meta.dirname;
-const ROOT = resolve(__dirname, "../..");
+const ROOT = resolve(__dirname, "../../..");
 const words = readFileSync(resolve(ROOT, "data/words"), "utf-8").trimEnd().split("\n");
 const lines = readFileSync(resolve(__dirname, "./golden.log"), "utf-8").trimEnd().split("\n");
 
