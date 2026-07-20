@@ -1,0 +1,7 @@
+% luatex --interaction=batchmode scripts/build/nodify/golden.tex && rm -f golden.pdf golden.log
+
+\vbadness=10000
+\input luaotfload.sty
+\font\tenrm={lmroman10-regular:-liga;-kern} at 10pt \tenrm
+\directlua{dofile("scripts/build/nodify/golden.lua")}
+\bye
