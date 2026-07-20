@@ -1,4 +1,4 @@
-import { tokenize } from "./tokenize";
+import { nodify } from "../nodify/nodify";
 import { TokenKind, type Token, type BreakOption, type MeasuredToken } from "./types";
 
 type H = (word: string) => number[];
