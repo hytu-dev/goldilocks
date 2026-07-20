@@ -1,2 +1,3 @@
 data/** linguist-vendored=true
 fixtures/** linguist-generated=true
+src/hyphenate/trie-en-us.ts linguist-generated=true
