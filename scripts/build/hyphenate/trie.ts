@@ -28,7 +28,10 @@ function buildTrie(lines: string[]): TrieNode {
   for (const raw of lines) {
     const { letters, values } = parsePats(raw);
     let node = trie;
-    for (const c of letters) node = (node[c] ??= {}) as TrieNode;
+    for (const c of letters) {
+      node[c] ??= {};
+      node = node[c] as TrieNode;
+    }
     node._ = values;
   }
   return trie;
@@ -53,7 +56,7 @@ function buildHyps(lines: string[]): Record<string, number[]> {
   const exceptions: Record<string, number[]> = {};
   for (const raw of lines) {
     const word = raw.replaceAll("-", "");
-    const breaks = [...raw.matchAll(/-/g)].map((m, i) => m.index! - i);
+    const breaks = [...raw.matchAll(/-/g)].map((m, i) => m.index - i);
     exceptions[word] = breaks;
   }
   return exceptions;
