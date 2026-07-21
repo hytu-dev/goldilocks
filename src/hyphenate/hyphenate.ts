@@ -1,7 +1,7 @@
 // Liang-Knuth hyphenation: patterns encode multi-level priorities where odd = break,
 // even = inhibit, and higher levels override lower ones.
 
-import { trie, exceptions } from "./trie-en-us";
+import { exceptions, trie } from "./trie-en-us";
 import type { TrieNode } from "./types";
 
 const LEFT_MIN = 2;

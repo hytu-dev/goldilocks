@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { rm } from "node:fs/promises";
+import { resolve } from "node:path";
 
 const __dirname = import.meta.dirname;
 const ROOT = resolve(__dirname, "../../..");
@@ -23,7 +23,7 @@ if (index !== words.length) {
 }
 
 const output = results.map((r) => `${r.word}\t${r.positions.join(",")}`).join("\n");
-writeFileSync(resolve(ROOT, "fixtures/golden.hyp"), output + "\n");
+writeFileSync(resolve(ROOT, "fixtures/golden.hyp"), `${output}\n`);
 await rm(resolve(__dirname, "./golden.log"));
 
 // helpers -----------------------------------------------------------------------------------------
