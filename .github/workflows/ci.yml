@@ -20,6 +20,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npx biome check .
+      - run: npx tsc --noEmit
       - run: npm run build
 
   test:
