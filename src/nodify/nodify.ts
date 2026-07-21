@@ -1,5 +1,5 @@
-import { TeXNode } from "./types";
 import { hyphenate } from "../hyphenate";
+import type { TeXNode } from "./types";
 
 const SEGMENT = /\p{L}+|\u002D|[^\p{L}\u002D]+/gu;
 const LETTERS = /^\p{L}+$/u;
@@ -42,7 +42,7 @@ function nodifySegments(chunk: string, nodes: TeXNode[]): void {
 
 function mergeTrailingHyphen(raw: string[]): string[] {
   if (raw.length >= 2 && raw[raw.length - 1] === "\u002D" && !LETTERS.test(raw[raw.length - 2]))
-    raw[raw.length - 2] += raw.pop()!;
+    raw[raw.length - 2] += raw.pop();
   return raw;
 }
 

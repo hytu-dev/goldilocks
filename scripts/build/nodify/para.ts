@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { rm } from "node:fs/promises";
+import { resolve } from "node:path";
 import { load } from "cheerio";
 
 const name = process.argv[2];
@@ -12,5 +12,5 @@ const parse = load(html);
 const paras = parse("p").map((_, p) => parse(p).text().replace(/\s+/g, " ").trim());
 
 const output = paras.get().filter(Boolean).join("\n");
-writeFileSync(resolve(DATA, name), output + "\n");
+writeFileSync(resolve(DATA, name), `${output}\n`);
 await rm(resolve(DATA, `${name}.html`));

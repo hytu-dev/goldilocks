@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { rm } from "node:fs/promises";
+import { resolve } from "node:path";
 
 const __dirname = import.meta.dirname;
 const ROOT = resolve(__dirname, "../../..");
@@ -13,5 +13,5 @@ if (entries.length !== paragraphs.length) {
 }
 
 const output = paragraphs.map((p, i) => `${p}\t${entries[i]}`).join("\n");
-writeFileSync(resolve(ROOT, "fixtures/golden.nod"), output + "\n");
+writeFileSync(resolve(ROOT, "fixtures/golden.nod"), `${output}\n`);
 await rm(resolve(__dirname, "./golden"));

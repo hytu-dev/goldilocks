@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync, unlinkSync } from "node:fs";
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { hyphenate } from "../../src/hyphenate";
 
@@ -17,7 +17,7 @@ if (existsSync(OUTPUT)) unlinkSync(OUTPUT);
 if (mismatches.length === 0) process.exit(0);
 
 const report = mismatches.map((m) => `${m.word}\t${m.expected}\t${m.actual}`).join("\n");
-writeFileSync(OUTPUT, report + "\n");
+writeFileSync(OUTPUT, `${report}\n`);
 process.exit(1);
 
 // helpers -----------------------------------------------------------------------------------------

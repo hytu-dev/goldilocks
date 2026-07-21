@@ -14,5 +14,6 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "ignoreDeprecations": "6.0"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/measure", "src/solve"]
 }
