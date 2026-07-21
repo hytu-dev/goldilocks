@@ -10,9 +10,7 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "dev": "vite demo",
     "build": "tsup",
@@ -22,19 +20,14 @@
     "type": "git",
     "url": "https://github.com/hytu-dev/goldilocks.git"
   },
-  "keywords": [
-    "typography",
-    "line-breaking",
-    "knuth-plass",
-    "hyphenation",
-    "web-component"
-  ],
+  "keywords": ["typography", "line-breaking", "knuth-plass", "hyphenation", "web-component"],
   "author": "hytu",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.4",
     "@types/node": "^26.1.0",
     "@vitest/browser-playwright": "^4.1.9",
     "cheerio": "^1.2.0",
