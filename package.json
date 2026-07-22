@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "vite demo",
     "build": "tsc",
-    "test": "vitest"
+    "test": "node scripts/test/golden.hyp.ts && node scripts/test/golden.nod.ts"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { hyphenate } from "../../src/hyphenate";
+import { hyphenate } from "../../src/hyphenate/index.ts";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 const OUTPUT = resolve(ROOT, "fixtures/mismatches.hyp");
