@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    name: Build
+  ci:
+    name: CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,26 +20,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx biome check .
-      - run: npx tsc --noEmit
+      - run: npm run check
+      - run: npm run typecheck
+      - run: npm run test
       - run: npm run build
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npx tsx scripts/test/golden.hyp.ts
-      - run: npx tsx scripts/test/golden.nod.ts
 
   update-badges:
     name: Update Badges
-    needs: [test]
+    needs: [ci]
     if: always() && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -51,7 +39,7 @@ jobs:
 
       - name: Generate badge JSON
         run: |
-          if [ "${{ needs.test.result }}" = "success" ]; then
+          if [ "${{ needs.ci.result }}" = "success" ]; then
             COLOR="brightgreen"
             MSG="430K words · 25K paras"
           else
