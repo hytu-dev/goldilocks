@@ -1,3 +1,3 @@
-export { nodify } from "./nodify";
+export { nodify } from "./nodify.ts";
 
-export type { TeXNode } from "./types";
+export type { TeXNode } from "./types.ts";

@@ -1,7 +1,6 @@
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { nodify } from "../../src/nodify/nodify";
-import type { TeXNode } from "../../src/nodify/types";
+import { nodify, type TeXNode } from "../../src/nodify/index.ts";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 const OUTPUT = resolve(ROOT, "fixtures/mismatches.nod");

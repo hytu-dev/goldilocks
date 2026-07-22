@@ -1,5 +1,5 @@
-import { hyphenate } from "../hyphenate";
-import type { TeXNode } from "./types";
+import { hyphenate } from "../hyphenate/index.ts";
+import type { TeXNode } from "./types.ts";
 
 const SEGMENT = /\p{L}+|\u002D|[^\p{L}\u002D]+/gu;
 const LETTERS = /^\p{L}+$/u;
