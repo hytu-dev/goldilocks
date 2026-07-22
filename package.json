@@ -12,9 +12,10 @@
   },
   "files": ["dist"],
   "scripts": {
-    "dev": "vite demo",
-    "build": "tsc",
-    "test": "node scripts/test/golden.hyp.ts && node scripts/test/golden.nod.ts"
+    "check": "biome check .",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/test/golden.hyp.ts && node scripts/test/golden.nod.ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
