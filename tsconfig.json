@@ -6,13 +6,13 @@
     "strict": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
     "isolatedModules": true,
     "skipLibCheck": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "rewriteRelativeImportExtensions": true
   },
   "include": ["src"],
   "exclude": ["src/measure", "src/solve"]

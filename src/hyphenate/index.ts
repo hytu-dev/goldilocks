@@ -1,1 +1,1 @@
-export { hyphenate } from "./hyphenate";
+export { hyphenate } from "./hyphenate.ts";
