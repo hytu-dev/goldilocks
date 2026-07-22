@@ -13,7 +13,7 @@
   "files": ["dist"],
   "scripts": {
     "dev": "vite demo",
-    "build": "tsup",
+    "build": "tsc",
     "test": "vitest"
   },
   "repository": {
@@ -30,7 +30,6 @@
     "@biomejs/biome": "2.5.4",
     "@types/node": "^26.1.0",
     "cheerio": "^1.2.0",
-    "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   }
 }
