@@ -14,5 +14,5 @@
     "rewriteRelativeImportExtensions": true
   },
   "include": ["src"],
-  "exclude": ["src/measure", "src/solve"]
+  "exclude": ["src/solve"]
 }
