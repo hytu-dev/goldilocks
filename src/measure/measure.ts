@@ -1,4 +1,4 @@
-import { NBSP, type TeXNode } from "./defs.js";
+import { NBSP, type TeXNode } from "../defs.js";
 
 const STRETCH_RATIO = 0.5;
 const Q = 1 / 60;
