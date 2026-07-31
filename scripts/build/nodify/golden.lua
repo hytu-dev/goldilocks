@@ -38,32 +38,58 @@ local function extract_text(head)
 end
 
 luatexbase.add_to_callback("pre_linebreak_filter", function(head)
-    local out, tmp, last_is_letter = {}, {}, nil
+    local out, chars, item_discs, last_is_letter = {}, {}, {}, nil
 
     local function flush()
-        if #tmp > 0 then
-            out[#out + 1] = "B:" .. table.concat(tmp)
-            tmp, last_is_letter = {}, nil
+        if #chars == 0 then return end
+        local entry = "I:" .. table.concat(chars)
+        if #item_discs > 0 then
+            entry = entry .. "[" .. table.concat(item_discs, ";") .. "]"
         end
+        out[#out + 1] = entry
+        chars, item_discs, last_is_letter = {}, {}, nil
+    end
+
+    local function has_content_after(n)
+        local nxt = n.next
+        while nxt do
+            if nxt.id == GLYPH then return true end
+            if nxt.id == GLUE and nxt.subtype ~= 15 then return false end
+            nxt = nxt.next
+        end
+        return false
     end
 
     for n in node.traverse(head) do
         if n.id == GLYPH then
-            if last_is_letter ~= nil and is_letter(n.char) ~= last_is_letter then flush() end
-            tmp[#tmp + 1], last_is_letter = unicode.utf8.char(n.char), is_letter(n.char)
+            local is_let = is_letter(n.char)
+            if #chars > 0 and last_is_letter ~= nil and is_let ~= last_is_letter then
+                flush()
+            end
+            chars[#chars + 1] = unicode.utf8.char(n.char)
+            last_is_letter = is_let
         elseif n.id == GLUE then
             if n.subtype ~= 15 then
                 flush()
                 out[#out + 1] = "G"
             end
         elseif n.id == DISC then
-            flush()
             if n.subtype == 2 then
-                local txt = n.replace and extract_text(n.replace) or "-"
-                out[#out + 1] = "B:" .. txt
-                out[#out + 1] = "P:f"
+                -- explicit hyphen: ends the current item, becomes its own item
+                flush()
+                local rep = n.replace and extract_text(n.replace) or "-"
+                if has_content_after(n) then
+                    out[#out + 1] = "I:" .. rep .. "[" .. #rep .. ",,,]"
+                else
+                    out[#out + 1] = "I:" .. rep
+                end
             else
-                out[#out + 1] = "P:t"
+                -- implicit hyphenation: stay inside the current item, record offset
+                local offset                = #chars
+                local pre                   = n.pre and extract_text(n.pre) or ""
+                local post                  = n.post and extract_text(n.post) or ""
+                local rep                   = n.replace and extract_text(n.replace) or ""
+                item_discs[#item_discs + 1] = offset .. "," .. pre .. "," .. post .. "," .. rep
             end
         end
     end

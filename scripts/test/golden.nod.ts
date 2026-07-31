@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { nodify, type TeXNode } from "../../src/nodify/index.ts";
+import type { TeXNode } from "../../src/defs.ts";
+import { nodify } from "../../src/nodify/index.ts";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 const OUTPUT = resolve(ROOT, "fixtures/mismatches.nod");
@@ -12,7 +13,7 @@ for (const line of lines) {
   const tab = line.indexOf("\t");
   const paragraph = line.slice(0, tab);
   const expected = line.slice(tab + 1);
-  const actual = serialize(nodify(paragraph));
+  const actual = serialize(nodify(paragraph, true));
   if (actual !== expected) mismatches.push({ paragraph, expected, actual });
 }
 
@@ -28,16 +29,12 @@ process.exit(1);
 function serialize(nodes: TeXNode[]): string {
   return nodes
     .map((n) => {
-      switch (n.type) {
-        case "box":
-          return `B:${n.text}`;
-        case "glue":
-          return "G";
-        case "penalty":
-          return `P:${n.flag ? "t" : "f"}`;
-        default:
-          throw new Error(`Unknown node type: ${n as never}`);
+      if (n.type === "glue") return "G";
+      let s = `I:${n.text}`;
+      if (n.discs && n.discs.length > 0) {
+        s += `[${n.discs.map((d) => `${d.offset},${d.pre},${d.post},${d.replace}`).join(";")}]`;
       }
+      return s;
     })
     .join("|");
 }
