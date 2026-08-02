@@ -32,5 +32,6 @@
     "@types/node": "^26.1.2",
     "cheerio": "^1.2.0",
     "typescript": "^7.0.2"
-  }
+  },
+  "packageManager": "pnpm@11.18.0"
 }
