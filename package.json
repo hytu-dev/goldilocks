@@ -14,7 +14,7 @@
   "scripts": {
     "check": "biome check .",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/test/golden.hyp.ts && node scripts/test/golden.nod.ts",
+    "test": "node scripts/test/golden.hyp.ts && node scripts/test/golden.nod.ts && node scripts/test/golden.sol.ts",
     "build": "tsc"
   },
   "repository": {

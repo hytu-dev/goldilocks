@@ -1,0 +1,20 @@
+% luatex --interaction=batchmode scripts/build/solve/golden.tex && rm -f golden.pdf golden.log
+
+\vbadness=10000 \hbadness=10000 \hfuzz=1000pt \vfuzz=1000pt
+\input luaotfload.sty
+\font\tenrm={lmroman10-regular:-liga;-kern} at 10pt \tenrm
+
+% Match solve's model. Without these two the engines disagree before the algorithm even starts:
+% NBSP cannot compress, and there is one uniform interword glue.
+\fontdimen4\tenrm=0pt
+\frenchspacing
+\parindent=0pt
+
+% Plain's defaults, restated so the fixture does not silently depend on the format.
+\pretolerance=100 \tolerance=200
+\linepenalty=10 \hyphenpenalty=50 \exhyphenpenalty=50
+\adjdemerits=10000 \doublehyphendemerits=10000 \finalhyphendemerits=5000
+\looseness=0
+
+\directlua{dofile("scripts/build/solve/golden.lua")}
+\bye
