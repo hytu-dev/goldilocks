@@ -1,2 +1,2 @@
-export { solve } from "./solve";
-export type { BreakRef, LineBreak, SolveResult } from "./solve";
+export type { Break, SolveOptions } from "./solve.ts";
+export { solve } from "./solve.ts";
