@@ -35,3 +35,15 @@ export interface Glue {
 export function glue(text: string = NBSP): Glue {
   return { type: "glue", text };
 }
+
+/**
+ * The rendered text of `item` between two breaks, `undefined` meaning the item's own edge.
+ * Must spell fragments exactly as collectSegments() spells them in measure.ts.
+ */
+export function segment(item: Item, from?: number, to?: number): string {
+  const head = from === undefined ? undefined : item.discs?.[from];
+  const tail = to === undefined ? undefined : item.discs?.[to];
+  const start = head ? head.offset + head.replace.length : 0;
+  const end = tail ? tail.offset : item.text.length;
+  return (head?.post ?? "") + item.text.slice(start, end) + (tail?.pre ?? "");
+}
