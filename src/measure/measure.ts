@@ -1,4 +1,4 @@
-import { NBSP, type TeXNode } from "../defs.js";
+import { NBSP, segment, type TeXNode } from "../defs.ts";
 
 const STRETCH_RATIO = 0.5;
 const Q = 1 / 60;
@@ -41,21 +41,23 @@ function batchMeasure(segments: Set<string>, el: HTMLElement): [Map<string, numb
   el.appendChild(wrapper);
   const cache = new Map<string, number>();
   for (const child of wrapper.children)
-    cache.set(child.textContent, child.getBoundingClientRect().width + Q);
+    cache.set(child.textContent ?? "", child.getBoundingClientRect().width + Q);
   return [cache, wrapper];
 }
 
+/**
+ * Every fragment solve() can ask for, spelled by segment() itself so that the two cannot drift.
+ * The whole item is absent on purpose: it is a node, and measure() prices it from the Range.
+ */
 function collectSegments(nodes: TeXNode[]): Set<string> {
   const segments = new Set<string>([NBSP]);
   for (const node of nodes) {
     if (node.type !== "item" || !node.discs) continue;
-    const { text, discs } = node;
-    const cuts = [0, ...discs.map((d) => d.offset), text.length];
-    for (let i = 0; i < cuts.length; i++)
-      for (let j = i + 1; j < cuts.length; j++) {
-        const seg = text.slice(cuts[i], cuts[j]);
-        if (j < cuts.length - 1) segments.add(seg + discs[j - 1].pre);
-        if (i > 0) segments.add(seg);
+    const cuts = node.discs.map((_, i) => i);
+    for (const from of [undefined, ...cuts])
+      for (const to of [...cuts, undefined]) {
+        if (from === undefined ? to === undefined : to !== undefined && to <= from) continue;
+        segments.add(segment(node, from, to));
       }
   }
   return segments;
