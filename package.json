@@ -1,18 +1,19 @@
 {
   "name": "@hytu/goldilocks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TeX-quality paragraph justification as a web component",
-  "keywords": ["knuth-plass", "line-breaking"],
+  "keywords": [
+    "knuth-plass",
+    "line-breaking"
+  ],
   "license": "MIT",
   "author": "hytu <me@hytu.dev>",
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hytu-dev/goldilocks.git"
   },
   "homepage": "https://goldilocks.hytu.dev",
   "bugs": "https://github.com/hytu-dev/goldilocks/issues",
-
   "type": "module",
   "main": "./out/init.js",
   "types": "./out/init.d.ts",
@@ -22,7 +23,9 @@
       "import": "./out/init.js"
     }
   },
-  "files": ["out"],
+  "files": [
+    "out"
+  ],
   "sideEffects": true,
   "publishConfig": {
     "access": "public"
@@ -33,7 +36,6 @@
     "build": "tsc",
     "prepublishOnly": "pnpm run build && publint && attw --pack --ignore-rules cjs-resolves-to-esm"
   },
-
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@biomejs/biome": "2.5.7",
