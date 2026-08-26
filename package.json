@@ -2,7 +2,7 @@
   "name": "@hytu/goldilocks",
   "version": "0.1.0",
   "description": "TeX-quality paragraph justification as a web component",
-  "keywords": ["knuth-plass", "line-breaking", "hyphenation", "typesetting", "justified-text"],
+  "keywords": ["knuth-plass", "line-breaking"],
   "license": "MIT",
   "author": "hytu <me@hytu.dev>",
 
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/hytu-dev/goldilocks.git"
   },
-  "homepage": "https://github.com/hytu-dev/goldilocks#readme",
+  "homepage": "https://goldilocks.hytu.dev",
   "bugs": "https://github.com/hytu-dev/goldilocks/issues",
 
   "type": "module",
