@@ -19,16 +19,5 @@
         "source.fixAll.biome": true
       }
     }
-  },
-  "lsp": {
-    "lua-language-server": {
-      "settings": {
-        "Lua": {
-          "diagnostics": {
-            "globals": ["lang", "callback", "tex", "node", "unicode", "luatexbase"]
-          }
-        }
-      }
-    }
   }
 }

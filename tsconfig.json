@@ -6,7 +6,7 @@
     "strict": true,
     "declaration": true,
     "declarationMap": true,
-    "outDir": "dist",
+    "outDir": "out",
     "rootDir": "src",
     "isolatedModules": true,
     "skipLibCheck": true,

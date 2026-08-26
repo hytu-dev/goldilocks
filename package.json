@@ -1,36 +1,44 @@
 {
   "name": "@hytu/goldilocks",
   "version": "0.1.0",
-  "description": "Knuth-Plass line breaking and hyphenation as a web component",
-  "type": "module",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "files": ["dist"],
-  "scripts": {
-    "check": "biome check .",
-    "typecheck": "tsc --noEmit",
-    "test": "node scripts/test/golden.hyp.ts && node scripts/test/golden.nod.ts && node scripts/test/golden.sol.ts",
-    "build": "tsc"
-  },
+  "description": "TeX-quality paragraph justification as a web component",
+  "keywords": ["knuth-plass", "line-breaking", "hyphenation", "typesetting", "justified-text"],
+  "license": "MIT",
+  "author": "hytu <me@hytu.dev>",
+
   "repository": {
     "type": "git",
-    "url": "https://github.com/hytu-dev/goldilocks.git"
+    "url": "git+https://github.com/hytu-dev/goldilocks.git"
   },
-  "keywords": ["typography", "line-breaking", "knuth-plass", "hyphenation", "web-component"],
-  "author": "hytu",
-  "license": "MIT",
+  "homepage": "https://github.com/hytu-dev/goldilocks#readme",
+  "bugs": "https://github.com/hytu-dev/goldilocks/issues",
+
+  "type": "module",
+  "main": "./out/init.js",
+  "types": "./out/init.d.ts",
+  "exports": {
+    ".": {
+      "types": "./out/init.d.ts",
+      "import": "./out/init.js"
+    }
+  },
+  "files": ["out"],
+  "sideEffects": true,
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "biome": "biome check .",
+    "check": "tsc --noEmit",
+    "build": "tsc",
+    "prepublishOnly": "pnpm run build && publint && attw --pack --ignore-rules cjs-resolves-to-esm"
+  },
+
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@biomejs/biome": "2.5.7",
     "@types/node": "^26.1.2",
-    "cheerio": "^1.2.0",
+    "publint": "^0.3.24",
     "typescript": "^7.0.2"
   },
   "packageManager": "pnpm@11.18.0"
