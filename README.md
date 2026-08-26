@@ -1,7 +1,7 @@
 # Goldilocks
 
 ```bash
-npm install @hytu/goldilocks@beta
+npm install @hytu/goldilocks
 ```
 
 ```js
@@ -11,7 +11,7 @@ import "@hytu/goldilocks";
 Or use a CDN:
 
 ```html
-<script type="module" src="https://esm.sh/@hytu/goldilocks@0.1.0"></script>
+<script type="module" src="https://esm.sh/@hytu/goldilocks"></script>
 ```
 
 Then:
