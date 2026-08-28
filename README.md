@@ -8,12 +8,6 @@ npm install @hytu/goldilocks
 import "@hytu/goldilocks";
 ```
 
-Or use a CDN:
-
-```html
-<script type="module" src="https://esm.sh/@hytu/goldilocks"></script>
-```
-
 Then:
 
 ```html
