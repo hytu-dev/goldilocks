@@ -1,0 +1,5 @@
+% luatex --interaction=batchmode ref/en-us/lho/generate.tex
+\catcode`\{=1 \catcode`\}=2 \catcode`\\=0
+\font\f=cmr10 \f
+\directlua{dofile("ref/en-us/lho/generate.lua")}
+\end
