@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <title>Goldilocks space font</title>
+    <style>
+      @font-face {
+        font-family: "Goldi Plain Test";
+        src: url("fixtures/plain.ttf");
+      }
+      @font-face {
+        font-family: "Goldi Kern Test";
+        src: url("fixtures/kern.ttf");
+      }
+      body {
+        margin: 16px;
+        font: 16px/1.4 system-ui, sans-serif;
+      }
+      .pair {
+        display: flex;
+        gap: 32px;
+        align-items: start;
+      }
+      .pair > div > p {
+        margin: 0 0 4px;
+        color: #666;
+        font-size: 13px;
+      }
+      .demo {
+        font: 96px "Goldi Kern Test", sans-serif;
+        outline: 1px dotted #aaa;
+      }
+      .para {
+        width: 320px;
+        font: 18px "Goldi Plain Test", sans-serif;
+        outline: 1px dotted #aaa;
+      }
+      .control {
+        display: block;
+        text-align: justify;
+        text-wrap: wrap;
+        hyphens: manual;
+      }
+      #stage {
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Goldilocks space font</h1>
+    <p>
+      “Goldi Kern Test” kerns T + space and space + A by −400 units, and ligates x space x into Z.
+      Left: the text as one run in that font. Right: the same text through &lt;goldi-break&gt;.
+    </p>
+    <div class="pair">
+      <div><p>plain text</p><div class="demo">T A x x</div></div>
+      <div><p>&lt;goldi-break&gt;</p><goldi-break class="demo" lang="en">T A x x</goldi-break></div>
+    </div>
+    <p>A paragraph with its spaces in the downstream font (left) and in the space font (right):</p>
+    <div class="pair">
+      <div><p>control</p><div id="demo-control" class="para"></div></div>
+      <div><p>&lt;goldi-break&gt;</p><goldi-break id="demo-para" class="para" lang="en"
+          >The quick brown fox jumps over the lazy dog. Typesetting is the composition of text by means of
+          arranging physical type or its digital equivalents. Stored letters and other symbols are
+          retrieved and ordered according to a language's orthography for visual display.</goldi-break
+        ></div>
+    </div>
+    <div id="stage"></div>
+
+    <script type="module">
+      const TEXT =
+        "The quick brown fox jumps over the lazy dog. Typesetting is the composition of text by " +
+        "means of arranging physical type or its digital equivalents. Stored letters and other " +
+        "symbols are retrieved and ordered according to a language's orthography for visual display.";
+
+      await Promise.all(
+        ["Goldi Plain Test", "Goldi Kern Test"].map((f) => document.fonts.load(`16px "${f}"`)),
+      );
+      await import("../out/init.js");
+
+      function settled(element) {
+        return new Promise((resolve, reject) => {
+          const start = performance.now();
+          (function poll() {
+            if (element.querySelector("goldi-space")) resolve(element);
+            else if (performance.now() - start > 5000) reject(new Error("not typeset"));
+            else requestAnimationFrame(poll);
+          })();
+        });
+      }
+
+      // a <goldi-break> in the stage, resolved once typeset
+      function make({ text = TEXT, style = "" } = {}) {
+        // built in an inert template so that it is upgraded, and reads its text, only on insertion
+        const template = document.createElement("template");
+        template.innerHTML = '<goldi-break lang="en"></goldi-break>';
+        const element = template.content.firstElementChild;
+        element.style.cssText = style;
+        element.textContent = text;
+        document.getElementById("stage").append(element);
+        return settled(element);
+      }
+
+      // the width of text in a span carrying the given style
+      function width(text, style) {
+        const span = document.createElement("span");
+        span.style.cssText = `position:absolute;white-space:pre;${style}`;
+        span.textContent = text;
+        document.body.append(span);
+        const w = span.getBoundingClientRect().width;
+        span.remove();
+        return w;
+      }
+
+      // the typeset content of element with every <goldi-space> unwrapped into a plain <span> in
+      // the element's own font, whose word-spacing gives it the same width
+      function control(element) {
+        const div = document.createElement("div");
+        div.className = `control ${element.className}`;
+        div.style.cssText = element.style.cssText;
+        element.after(div);
+        // the natural width of a space, in place and before justification
+        const natural = (parent, tag, text, wordSpacing) => {
+          const probe = parent.appendChild(document.createElement(tag));
+          probe.style.cssText = `position:absolute;white-space:pre;word-spacing:${wordSpacing}`;
+          probe.textContent = text;
+          const w = probe.getBoundingClientRect().width;
+          probe.remove();
+          return w;
+        };
+        for (const node of element.childNodes) {
+          if (node.nodeName === "GOLDI-SPACE") {
+            const text = node.textContent;
+            const target = natural(element, "goldi-space", text, "");
+            const span = div.appendChild(document.createElement("span"));
+            span.textContent = text;
+            span.style.wordSpacing = `${target - natural(div, "span", text, "0px")}px`;
+          } else {
+            div.append(node.cloneNode(true));
+          }
+        }
+        return div;
+      }
+
+      // the box of every child node of root, relative to root (text boxes span the line's font
+      // ascent and descent, element boxes their inline box), plus a zero-size inline-block
+      // appended to root whose bottom edge lies on the baseline of the last line
+      function geometry(root) {
+        const origin = root.getBoundingClientRect();
+        const boxes = [];
+        for (const node of root.childNodes) {
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          const text = node.nodeType === Node.TEXT_NODE;
+          for (const r of text ? range.getClientRects() : [node.getBoundingClientRect()]) {
+            const [top, bottom] = [r.top - origin.top, r.bottom - origin.top];
+            const [left, right] = [r.left - origin.left, r.right - origin.left];
+            boxes.push({ text, top, bottom, left, right });
+          }
+        }
+        const marker = root.appendChild(document.createElement("span"));
+        marker.style.cssText = "display:inline-block;width:0;height:0";
+        const baseline = marker.getBoundingClientRect().bottom - origin.top;
+        marker.remove();
+        return { height: origin.height, baseline, boxes };
+      }
+
+      // the fraction of dark pixels in each row of a PNG screenshot
+      async function ink(png) {
+        const bytes = Uint8Array.from(atob(png), (c) => c.charCodeAt(0));
+        const bitmap = await createImageBitmap(new Blob([bytes], { type: "image/png" }));
+        const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+        const context = canvas.getContext("2d");
+        context.drawImage(bitmap, 0, 0);
+        const { data, width, height } = context.getImageData(0, 0, bitmap.width, bitmap.height);
+        const rows = [];
+        for (let y = 0; y < height; ++y) {
+          let dark = 0;
+          for (let x = 0; x < width; ++x) if (data[4 * (y * width + x)] < 128) ++dark;
+          rows.push(dark / width);
+        }
+        return rows;
+      }
+
+      window.lab = { TEXT, make, width, control, geometry, ink };
+
+      const para = document.getElementById("demo-para");
+      await settled(para);
+      await settled(document.querySelector(".demo[lang]"));
+      document.getElementById("demo-control").replaceWith(control(para));
+      document.documentElement.dataset.ready = "";
+    </script>
+  </body>
+</html>

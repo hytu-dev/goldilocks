@@ -1,3 +1,4 @@
+import * as Space from "../space/init.ts";
 import { fuse, type ReadonlyNodes, type Stash } from "./defs.ts";
 
 const EPSILON = 1 / 60; // Gecko app unit = 1/60px, Blink/WebKit LayoutUnit = 1/64px
@@ -26,7 +27,7 @@ export function size(cache: Stash, element: HTMLElement, nodes: ReadonlyNodes): 
   for (const p of pending) {
     if (cache.has(p)) continue;
     const snippet = wrapper.appendChild(element.ownerDocument.createElement("span"));
-    snippet.textContent = p;
+    snippet.append(Space.render(element.ownerDocument, p)); // spaces as they will be rendered
   }
 
   if (!wrapper.firstChild) return;

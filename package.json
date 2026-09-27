@@ -31,12 +31,15 @@
     "biome": "biome check .",
     "check": "tsc --noEmit",
     "build": "tsc",
+    "font": "node scripts/space-font.ts",
+    "test": "pnpm run build && playwright test",
     "prepublishOnly": "pnpm run build && publint && attw --pack --ignore-rules cjs-resolves-to-esm"
   },
 
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@biomejs/biome": "2.5.7",
+    "@playwright/test": "^1.63.0",
     "@types/node": "^26.1.2",
     "publint": "^0.3.24",
     "typescript": "^7.0.2"
