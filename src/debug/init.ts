@@ -1,4 +1,5 @@
 import { dump } from "./dump.ts";
+import { scan } from "./scan.ts";
 
 window.__GOLDILOCKS_DEBUG = {
   dump() {
@@ -8,4 +9,5 @@ window.__GOLDILOCKS_DEBUG = {
       marks ? dump(nodes, marks) : console.warn("No marks yet");
     });
   },
+  scan,
 };

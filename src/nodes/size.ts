@@ -1,7 +1,5 @@
 import * as Space from "../space/init.ts";
-import { fuse, type ReadonlyNodes, type Stash } from "./defs.ts";
-
-const EPSILON = 1 / 60; // Gecko app unit = 1/60px, Blink/WebKit LayoutUnit = 1/64px
+import { EPSILON, fuse, type ReadonlyNodes, type Stash } from "./defs.ts";
 
 export function size(cache: Stash, element: HTMLElement, nodes: ReadonlyNodes): void {
   const pending = new Set<string>();

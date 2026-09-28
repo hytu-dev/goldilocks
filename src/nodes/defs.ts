@@ -36,6 +36,8 @@ export function fuse(item: Item, i: number, j: number): string {
 
 export type Mark = { nidx: number; didx?: number };
 
+export const EPSILON = 1 / 60; // Gecko app unit = 1/60px, Blink/WebKit LayoutUnit = 1/64px
+
 export type Stash = Map<string, number>;
 export type ReadonlyStash = ReadonlyMap<string, number>;
 export type ReadonlyNodes = ReadonlyArray<Node>;
