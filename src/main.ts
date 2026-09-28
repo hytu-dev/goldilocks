@@ -19,10 +19,7 @@ export class GoldiBreak extends HTMLElement {
   connectedCallback(): void {
     const doc = this.ownerDocument;
     if (!doc.adoptedStyleSheets.includes(sheet)) doc.adoptedStyleSheets.push(sheet);
-    Promise.all([Space.load(doc), doc.fonts.ready]).then(([loaded]) => {
-      if (!loaded) console.warn(`<${TAG}> could not load its space font`);
-      this.typeset();
-    });
+    Promise.all([Space.load(), doc.fonts.ready]).then(() => this.typeset());
     this.addEventListener("copy", this.#onCopy);
   }
 

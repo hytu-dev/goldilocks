@@ -9,58 +9,35 @@ export const TAG = "goldi-space";
 // the natural width of a space, relative to that of the surrounding font
 export const RATIO = 2 / 3;
 
-const FONT = "--goldi-space-font";
 const WIDTH = "--goldi-space-width";
 
-export const RULE =
-  `${TAG}{font-family:var(${FONT});word-spacing:var(${WIDTH});` +
-  "line-height:0;font-synthesis:none;font-size-adjust:none}";
+export const RULE = `${TAG}{font-family:"${FAMILY}";word-spacing:var(${WIDTH});line-height:0;font-synthesis:none}`;
 
-const faces = new WeakMap<Document, Promise<boolean>>();
+let loaded: Promise<FontFace> | undefined;
 
-export function load(doc: Document): Promise<boolean> {
-  let loaded = faces.get(doc);
+export function load(): Promise<FontFace> {
   if (!loaded) {
-    const face = new FontFace(FAMILY, bytes(), {
-      unicodeRange: "U+20, U+A0",
-      weight: "1 1000",
-      stretch: "50% 200%",
-    });
-    doc.fonts.add(face);
-    loaded = face.load().then(
-      () => true,
-      () => false,
-    );
-    faces.set(doc, loaded);
+    const face = new FontFace(FAMILY, bytes(), { unicodeRange: "U+20, U+A0" });
+    document.fonts.add(face);
+    loaded = face.load();
   }
   return loaded;
 }
 
-// sets the space width on the element to RATIO times the width of a space in its own font, the
-// latter including any word-spacing and letter-spacing the element carries
+// sets the space width on the element to RATIO times the width of a space in its own font
 export function fit(element: HTMLElement): void {
-  const doc = element.ownerDocument;
-  const { fontFamily, fontSize } = getComputedStyle(element);
-  // the element's own fonts follow as a fallback, should the space font fail to load
-  element.style.setProperty(FONT, `"${FAMILY}", ${fontFamily}`);
-  element.style.setProperty(WIDTH, "0px");
-
-  const probe = doc.createElement("span");
+  const probe = element.appendChild(document.createElement("span"));
   probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
-  const plain = probe.appendChild(doc.createElement("span"));
-  const space = probe.appendChild(doc.createElement(TAG));
-  plain.textContent = space.textContent = " ";
-  element.appendChild(probe);
-  const target = RATIO * plain.getBoundingClientRect().width;
-  const bare = space.getBoundingClientRect().width;
+  probe.textContent = " ";
+  const width = RATIO * probe.getBoundingClientRect().width;
   probe.remove();
-
-  element.style.setProperty(WIDTH, `${(target - bare) / Number.parseFloat(fontSize)}em`);
+  const size = Number.parseFloat(getComputedStyle(element).fontSize);
+  element.style.setProperty(WIDTH, `${width / size}em`);
 }
 
 export function render(doc: Document, text: string): DocumentFragment {
   const fragment = doc.createDocumentFragment();
-  for (const [i, part] of text.split(/([  ])/).entries()) {
+  for (const [i, part] of text.split(/([\u0020\u00A0])/).entries()) {
     if (i % 2) fragment.appendChild(doc.createElement(TAG)).textContent = part;
     else if (part) fragment.append(part);
   }
