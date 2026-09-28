@@ -31,7 +31,6 @@
     "biome": "biome check .",
     "check": "tsc --noEmit",
     "build": "tsc",
-    "font": "node scripts/space-font.ts",
     "prepublishOnly": "pnpm run build && publint && attw --pack --ignore-rules cjs-resolves-to-esm"
   },
 

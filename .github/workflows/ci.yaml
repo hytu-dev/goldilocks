@@ -24,4 +24,3 @@ jobs:
       - run: pnpm run biome
       - run: pnpm run check
       - run: pnpm run build
-      - run: node scripts/space-font.ts --check
