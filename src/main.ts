@@ -1,3 +1,4 @@
+import type { ReadonlyMarks, ReadonlyNodes } from "./nodes/init.ts";
 import * as Nodes from "./nodes/init.ts";
 import * as Space from "./space/init.ts";
 
@@ -9,8 +10,10 @@ sheet.replaceSync(
 );
 
 export class GoldiBreak extends HTMLElement {
-  static #stash = new Map<string, number>();
-  #input = this.textContent;
+  static stash = new Map<string, number>();
+  input = this.textContent;
+  nodes: ReadonlyNodes | null = null;
+  marks: ReadonlyMarks | null = null;
   #markup = this.childElementCount > 0;
 
   connectedCallback(): void {
@@ -18,11 +21,16 @@ export class GoldiBreak extends HTMLElement {
     if (!doc.adoptedStyleSheets.includes(sheet)) doc.adoptedStyleSheets.push(sheet);
     Promise.all([Space.load(doc), doc.fonts.ready]).then(([loaded]) => {
       if (!loaded) console.warn(`<${TAG}> could not load its space font`);
-      this.#typeset();
+      this.typeset();
     });
+    this.addEventListener("copy", this.#onCopy);
   }
 
-  #typeset(): void {
+  disconnectedCallback(): void {
+    this.removeEventListener("copy", this.#onCopy);
+  }
+
+  typeset(): void {
     const lang = this.getAttribute("lang");
     if (lang === null) throw new Error("<goldi-break> requires a lang attribute");
     if (!SUPPORTED.has(lang)) throw new Error(`<goldi-break> does not support lang="${lang}"`);
@@ -32,14 +40,22 @@ export class GoldiBreak extends HTMLElement {
     const fs = fontSize(this);
     Space.fit(this);
 
-    const nodes = Nodes.from(this.#input);
-    Nodes.size(GoldiBreak.#stash, this, nodes);
-    const marks = Nodes.wrap(GoldiBreak.#stash, nodes, { lineWidth: lw, emergency: 3 * fs });
-    if (marks) {
-      const text = Nodes.mark(nodes, marks).join("");
+    this.nodes = Nodes.from(this.input);
+    Nodes.size(GoldiBreak.stash, this, this.nodes);
+    this.marks = Nodes.wrap(GoldiBreak.stash, this.nodes, { lineWidth: lw, emergency: 3 * fs });
+    if (this.marks) {
+      const text = Nodes.mark(this.nodes, this.marks).join("");
       this.replaceChildren(Space.render(this.ownerDocument, text));
     }
   }
+
+  #onCopy = (e: ClipboardEvent): void => {
+    const selected = this.ownerDocument.getSelection()?.toString();
+    if (!selected || !e.clipboardData) return;
+    e.preventDefault();
+    const purified = selected.replaceAll("\u00A0", " ").replace(/[\u00AD\u2060]/g, "");
+    e.clipboardData.setData("text/plain", purified);
+  };
 }
 
 if (!globalThis.customElements.get(TAG)) globalThis.customElements.define(TAG, GoldiBreak);
