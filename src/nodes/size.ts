@@ -27,7 +27,7 @@ export function size(cache: Stash, element: HTMLElement, nodes: ReadonlyNodes): 
   for (const p of pending) {
     if (cache.has(p)) continue;
     const snippet = wrapper.appendChild(element.ownerDocument.createElement("span"));
-    snippet.append(Space.render(element.ownerDocument, p)); // spaces as they will be rendered
+    snippet.append(Space.draw(element.ownerDocument, p)); // spaces as they will be rendered
   }
 
   if (!wrapper.firstChild) return;

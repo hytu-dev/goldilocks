@@ -35,14 +35,14 @@ export class GoldiBreak extends HTMLElement {
 
     const lw = lineWidth(this);
     const fs = fontSize(this);
-    Space.fit(this);
+    Space.size(this);
 
     this.nodes = Nodes.from(this.input);
     Nodes.size(GoldiBreak.stash, this, this.nodes);
     this.marks = Nodes.wrap(GoldiBreak.stash, this.nodes, { lineWidth: lw, emergency: 3 * fs });
     if (this.marks) {
       const text = Nodes.mark(this.nodes, this.marks).join("");
-      this.replaceChildren(Space.render(this.ownerDocument, text));
+      this.replaceChildren(Space.draw(this.ownerDocument, text));
     }
   }
 
